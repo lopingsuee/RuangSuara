@@ -1,10 +1,25 @@
-import CONFIG from '../config';
+const API_ENDPOINT = "https://story-api.dicoding.dev/v1";
 
-const ENDPOINTS = {
-  ENDPOINT: `${CONFIG.BASE_URL}/your/endpoint/here`,
+const API = {
+  async registerUser(name, email, password) {
+    try {
+      const response = await fetch(`${API_ENDPOINT}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const responseJson = await response.json();
+      if (!response.ok) {
+        throw new Error(responseJson.message);
+      }
+
+      return responseJson;
+    } catch (error) {
+      console.error("Register error:", error);
+      return { error: true, message: error.message };
+    }
+  },
 };
 
-export async function getData() {
-  const fetchResponse = await fetch(ENDPOINTS.ENDPOINT);
-  return await fetchResponse.json();
-}
+export default API;
