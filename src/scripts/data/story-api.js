@@ -1,8 +1,32 @@
+const API_ENDPOINT = "https://story-api.dicoding.dev/v1";
+
 const StoryAPI = {
   async getAllStories() {
-    const response = await fetch("https://story-api.dicoding.dev/v1/stories");
-    const responseJson = await response.json();
-    return responseJson.listStory;
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login ulang.");
+      }
+
+      const response = await fetch(`${API_ENDPOINT}/stories`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Kirim token di sini
+          "Content-Type": "application/json",
+        },
+      });
+
+      const responseJson = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseJson.message);
+      }
+
+      return responseJson.listStory;
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+      return { error: true, message: error.message };
+    }
   },
 };
 
