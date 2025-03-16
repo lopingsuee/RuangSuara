@@ -41,7 +41,7 @@ class LoginPage {
       const password = document.querySelector("#password").value;
 
       message.textContent = "";
-      message.className = "text-center mt-4 text-sm"; // Reset class
+      message.className = "text-center mt-4 text-sm"; 
 
       if (!email || !password) {
         message.textContent = "Error: Email and password are required!";
@@ -56,14 +56,13 @@ class LoginPage {
           message.textContent = `Error: ${response.message}`;
           message.classList.add("text-red-500");
         } else {
-          const { token } = response.loginResult; // Ambil token dari response
-          localStorage.setItem("authToken", token); // Simpan ke localStorage
-
+          const { token } = response.loginResult; 
+          localStorage.setItem("authToken", token); 
           message.textContent = "Login successful! Redirecting...";
           message.classList.add("text-green-500");
 
           setTimeout(() => {
-            window.location.hash = "/"; // Redirect ke home page
+            window.location.hash = "/"; 
           }, 2000);
         }
       } catch (error) {

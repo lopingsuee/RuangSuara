@@ -2,14 +2,8 @@ const createInstagramCard = (story) => `
   <section class="w-full max-w-md">
     <div class="mb-6 overflow-hidden">
       
-      <!-- Card Header -->
       <div class="flex justify-between items-center p-3">
         <div class="flex items-center">
-          <img 
-            class="w-8 h-8 rounded-full mr-3 object-cover" 
-            src="https://via.placeholder.com/32" 
-            alt="${story.name}"
-          >
           <div class="flex items-center">
             <a href="#" class="font-semibold text-sm text-black dark:text-black">${
               story.name
@@ -51,7 +45,6 @@ const createInstagramCard = (story) => `
         </button>
       </div>
       
-      <!-- Caption -->
       <div class="px-3 mb-2">
         <p class="text-sm text-black dark:text-black">
           <a href="#" class="font-semibold mr-1">${story.name}</a>
@@ -59,10 +52,8 @@ const createInstagramCard = (story) => `
         </p>
       </div>
       
-      <!-- Comments -->
       <a href="#" class="block px-3 mb-2 text-sm text-black dark:text-gray-400">View comments</a>
       
-      <!-- Add Comment -->
       <div class="flex p-3 border-t border-gray-200 dark:border-gray-700">
         <input type="text" class="w-full bg-transparent text-sm text-black dark:text-black outline-none" placeholder="Add a comment...">
       </div>

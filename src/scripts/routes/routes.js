@@ -1,12 +1,10 @@
 import HomePage from '../pages/home/home-page';
-import AboutPage from '../pages/about/about-page';
 import StoryPage from "../pages/story/story-page.js";
-import RegisterPage from "../pages/auth/register-page.js"; // Import halaman register
+import RegisterPage from "../pages/auth/register-page.js"; 
 import LoginPage from '../pages/auth/login-page.js';
 
 const routes = {
   "/": new HomePage(),
-  "/about": new AboutPage(),
   "/story": new StoryPage(),
   "/register": new RegisterPage(),
   "/login": new LoginPage(),

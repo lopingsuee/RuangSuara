@@ -1,29 +1,26 @@
-import App from './pages/app';
+import App from "./pages/app";
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const app = new App({
-    content: document.querySelector('#main-content'),
-    drawerButton: document.querySelector('#drawer-button'),
-    navigationDrawer: document.querySelector('#navigation-drawer'),
+    content: document.querySelector("#main-content"),
+    drawerButton: document.querySelector("#drawer-button"),
+    navigationDrawer: document.querySelector("#navigation-drawer"),
   });
-  await app.renderPage();
-console.log("renderPage() berhasil dijalankan.");
 
+  async function renderWithSlideTransition() {
+    if (!document.startViewTransition) {
+      await app.renderPage();
+      return;
+    }
 
-  window.addEventListener('hashchange', async () => {
-    await app.renderPage();
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const toggleButton = document.querySelector(
-    '[data-collapse-toggle="navbar-default"]'
-  );
-  const navbarMenu = document.getElementById("navbar-default");
-
-  if (toggleButton && navbarMenu) {
-    toggleButton.addEventListener("click", () => {
-      navbarMenu.classList.toggle("hidden");
+    document.startViewTransition(async () => {
+      const content = document.querySelector("#main-content");
+      content.setAttribute("data-transition", "page");
+      await app.renderPage();
     });
   }
+
+  await renderWithSlideTransition();
+
+  window.addEventListener("hashchange", renderWithSlideTransition);
 });

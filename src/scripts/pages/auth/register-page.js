@@ -51,7 +51,7 @@ class RegisterPage {
       const confirmPassword = document.querySelector("#confirm-password").value;
 
       message.textContent = "";
-      message.className = "text-center mt-4 text-sm"; // Reset class setiap submit
+      message.className = "text-center mt-4 text-sm"; 
 
       if (password !== confirmPassword) {
         message.textContent = "Error: Passwords do not match!";
@@ -70,7 +70,7 @@ class RegisterPage {
           message.classList.add("text-green-500");
 
           setTimeout(() => {
-            window.location.hash = "/login"; // Redirect ke halaman login
+            window.location.hash = "/login"; 
           }, 2000);
         }
       } catch (error) {

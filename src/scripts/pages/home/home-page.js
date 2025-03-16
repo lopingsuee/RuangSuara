@@ -22,14 +22,13 @@ class HomePage {
 
     let currentPage = 1;
     const pageSize = 10;
-    const token = localStorage.getItem("token"); // Ambil token dari local storage
-
+    const token = localStorage.getItem("token"); 
     const loadStories = async () => {
       try {
         const stories = await StoryAPI.getAllStories({
           page: currentPage,
           size: pageSize,
-          location: 0, // Tidak perlu filter lokasi
+          location: 0, 
           token,
         });
 
@@ -38,23 +37,20 @@ class HomePage {
           return;
         }
 
-        // Gunakan createInstagramCard untuk setiap story
         stories.forEach((story) => {
           storiesContainer.innerHTML += createInstagramCard(story);
         });
 
         if (stories.length < pageSize) {
-          loadMoreButton.style.display = "none"; // Sembunyikan tombol jika data habis
+          loadMoreButton.style.display = "none"; 
         }
       } catch (error) {
         storiesContainer.innerHTML = `<p class="text-red-500">Gagal memuat cerita. Silakan coba lagi.</p>`;
       }
     };
 
-    // Load pertama kali
     await loadStories();
 
-    // Event listener untuk tombol "Load More"
     loadMoreButton.addEventListener("click", async () => {
       currentPage++;
       await loadStories();

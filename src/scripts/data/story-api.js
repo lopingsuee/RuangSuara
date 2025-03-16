@@ -11,7 +11,7 @@ const StoryAPI = {
       const response = await fetch(`${API_ENDPOINT}/stories`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`, // Kirim token di sini
+          Authorization: `Bearer ${token}`, 
           "Content-Type": "application/json",
         },
       });
