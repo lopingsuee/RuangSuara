@@ -24,3 +24,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.addEventListener("hashchange", renderWithSlideTransition);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const skipLink = document.querySelector('a[href="#main-content"]');
+
+  skipLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    document.querySelector("#main-content").setAttribute("tabindex", "-1");
+    document.querySelector("#main-content").focus();
+  });
+});

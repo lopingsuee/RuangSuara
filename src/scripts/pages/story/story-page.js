@@ -1,7 +1,7 @@
 export default class PostStoryPage {
   async render() {
     return `
-      <section class="max-w-lg mx-auto p-4 fade-in show">
+      <section id="main-content" class="max-w-lg mx-auto p-4 fade-in show">
         <h1 class="text-xl font-semibold mb-4">Post a New Story</h1>
         
         <form id="postStoryForm" class="space-y-4">
@@ -46,6 +46,11 @@ export default class PostStoryPage {
 
   async afterRender() {
     console.log("PostStoryPage loaded");
+    window.addEventListener("hashchange", () => {
+      if (window.location.hash !== "#/story") {
+        stopCamera();
+      }
+    });
 
     document.body.classList.add("fade-in", "show");
 
@@ -142,6 +147,18 @@ export default class PostStoryPage {
           return;
         }
 
+        const stopCamera = () => {
+          const camera = document.getElementById("camera");
+          const stream = camera?.srcObject;
+          if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach((track) => track.stop()); // Matikan semua track kamera
+          }
+          if (camera) {
+            camera.srcObject = null; // Hapus referensi stream dari elemen video
+          }
+        };
+
         const response = await fetch(
           "https://story-api.dicoding.dev/v1/stories",
           {
@@ -162,12 +179,14 @@ export default class PostStoryPage {
 
         alert("Story posted successfully!");
 
+        stopCamera();
+
         if (document.startViewTransition) {
           document.startViewTransition(() => {
             window.location.href = "#/";
           });
         } else {
-          window.location.href = "#/"; 
+          window.location.href = "#/";
         }
       } catch (error) {
         console.error("Error posting story:", error);

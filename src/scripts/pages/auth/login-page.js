@@ -3,7 +3,7 @@ import AuthAPI from "../../data/auth-api.js";
 class LoginPage {
   async render() {
     return `
-<section class="bg-white text-black flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+<section id="main-content" class="bg-white text-black flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
   <div class="w-full bg-white border rounded-lg shadow sm:max-w-md p-8">
     <h2 class="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl">
       Login
