@@ -6,6 +6,7 @@ class PostStoryPresenter {
     this.view = new PostStoryView();
     this.container = container;
     this.photoBlob = null;
+    this.handlePageUnload = this.handlePageUnload.bind(this);
   }
 
   async init() {
@@ -14,12 +15,16 @@ class PostStoryPresenter {
 
     this.setupCamera();
     this.setupMap();
+
     this.elements.captureBtn.addEventListener("click", () =>
       this.capturePhoto()
     );
     this.elements.form.addEventListener("submit", (event) =>
       this.submitStory(event)
     );
+
+    window.addEventListener("hashchange", this.handlePageUnload);
+    window.addEventListener("beforeunload", this.handlePageUnload);
   }
 
   setupCamera() {
@@ -27,11 +32,61 @@ class PostStoryPresenter {
       navigator.mediaDevices
         .getUserMedia({ video: true })
         .then((stream) => {
+          this.cameraStream = stream;
           this.elements.camera.srcObject = stream;
         })
         .catch(() => {
           this.view.showErrorMessage("Failed to access camera");
         });
+    }
+  }
+
+  stopCamera() {
+    if (this.cameraStream) {
+      this.cameraStream.getTracks().forEach((track) => track.stop());
+      this.elements.camera.srcObject = null;
+      this.cameraStream = null;
+    }
+  }
+
+  handlePageUnload() {
+    this.stopCamera();
+    window.removeEventListener("hashchange", this.handlePageUnload);
+    window.removeEventListener("beforeunload", this.handlePageUnload);
+  }
+
+  async submitStory(event) {
+    event.preventDefault();
+
+    const description = this.elements.description.value;
+    const lat = this.elements.latInput.value;
+    const lon = this.elements.lonInput.value;
+
+    if (!this.photoBlob) {
+      this.view.showErrorMessage("Please capture a photo before submitting.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("description", description);
+    formData.append("photo", this.photoBlob, "story.jpg");
+    if (lat && lon) {
+      formData.append("lat", lat);
+      formData.append("lon", lon);
+    }
+
+    try {
+      const response = await StoryAPI.postStory(formData);
+
+      if (response.error) {
+        throw new Error(response.message || "Failed to upload story");
+      }
+
+      alert("Story posted successfully!");
+      this.stopCamera(); 
+      window.location.href = "#/";
+    } catch (error) {
+      this.view.showErrorMessage(`Failed to post story: ${error.message}`);
     }
   }
 
@@ -101,8 +156,11 @@ class PostStoryPresenter {
 
     try {
       const response = await StoryAPI.postStory(formData);
-      if (!response.ok)
+
+      if (response.error) {
         throw new Error(response.message || "Failed to upload story");
+      }
+
       alert("Story posted successfully!");
       window.location.href = "#/";
     } catch (error) {

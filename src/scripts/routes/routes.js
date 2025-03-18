@@ -10,4 +10,5 @@ const routes = {
   "/login": new LoginPage(),
 };
 
+
 export default routes;

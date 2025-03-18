@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   let userToken = localStorage.getItem("authToken");
-  console.log("User Token:", userToken);
 
   const loginMenu = document.querySelector("#menu-login");
   const registerMenu = document.querySelector("#menu-register");

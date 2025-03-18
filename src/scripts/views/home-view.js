@@ -3,6 +3,7 @@ class HomeView {
     return `
       <section id="main-content" class="container mx-auto p-4">
         <h1 class="text-2xl font-bold text-center mb-4">Story Feed</h1>
+        <h1 class="text-xl font-bold text-center mb-4">Semangattt kakak reviewer🔥</h1>
         <div id="stories-container" class="flex flex-col items-center gap-6">
           <!-- Data dari API akan ditampilkan di sini -->
         </div>
