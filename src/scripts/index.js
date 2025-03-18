@@ -15,22 +15,64 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.startViewTransition(async () => {
       const content = document.querySelector("#main-content");
-      content.setAttribute("data-transition", "page");
+      if (content) {
+        content.setAttribute("data-transition", "page");
+      }
       await app.renderPage();
     });
   }
 
   await renderWithSlideTransition();
-
   window.addEventListener("hashchange", renderWithSlideTransition);
-});
 
-document.addEventListener("DOMContentLoaded", () => {
   const skipLink = document.querySelector('a[href="#main-content"]');
+  const mainContent = document.querySelector("#main-content");
+
+  if (!skipLink || !mainContent) {
+    console.warn("Skip link or main content not found.");
+    return;
+  }
 
   skipLink.addEventListener("click", (event) => {
     event.preventDefault();
-    document.querySelector("#main-content").setAttribute("tabindex", "-1");
-    document.querySelector("#main-content").focus();
+    mainContent.setAttribute("tabindex", "-1");
+    mainContent.focus();
+  });
+
+  let userToken = localStorage.getItem("authToken");
+  console.log("User Token:", userToken);
+
+  const loginMenu = document.querySelector("#menu-login");
+  const registerMenu = document.querySelector("#menu-register");
+
+  function updateAuthUI() {
+    userToken = localStorage.getItem("authToken");
+    if (userToken) {
+      if (loginMenu) loginMenu.style.display = "none"; 
+      if (registerMenu) {
+        registerMenu.textContent = "Logout";
+        registerMenu.id = "menu-logout";
+        registerMenu.href = "#"; 
+      }
+    } else {
+      if (loginMenu) loginMenu.style.display = "block"; 
+      if (registerMenu) {
+        registerMenu.textContent = "Register";
+        registerMenu.id = "menu-register";
+        registerMenu.href = "#/register";
+      }
+    }
+  }
+
+  updateAuthUI();
+
+  document.addEventListener("click", (event) => {
+    if (event.target.id === "menu-logout") {
+      event.preventDefault();
+      localStorage.removeItem("token"); 
+      alert("Logout berhasil!");
+      updateAuthUI(); 
+      window.location.hash = "#/login"; 
+    }
   });
 });
