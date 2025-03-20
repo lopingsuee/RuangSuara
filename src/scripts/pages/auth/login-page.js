@@ -8,10 +8,10 @@ export default class LoginPage {
   }
 
   async render() {
-    return this.view.render(); // Pastikan HTML dikembalikan
+    return this.view.render();
   }
 
   async afterRender() {
-    await this.view.afterRender(); // Menjalankan event listener
+    await this.view.afterRender(this.presenter);
   }
 }

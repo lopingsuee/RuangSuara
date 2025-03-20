@@ -83,7 +83,7 @@ class PostStoryPresenter {
       }
 
       alert("Story posted successfully!");
-      this.stopCamera(); 
+      this.stopCamera();
       window.location.href = "#/";
     } catch (error) {
       this.view.showErrorMessage(`Failed to post story: ${error.message}`);

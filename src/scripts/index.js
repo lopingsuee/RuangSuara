@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.addEventListener("click", (event) => {
     if (event.target.id === "menu-logout") {
       event.preventDefault();
-      localStorage.removeItem("token"); 
+      localStorage.removeItem("authToken"); 
       alert("Logout berhasil!");
       updateAuthUI(); 
       window.location.hash = "#/login"; 
