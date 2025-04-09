@@ -1,60 +1,28 @@
-const DB_NAME = "storyApp";
+import { openDB } from "idb";
+
+const DB_NAME = "instafeed-db";
 const DB_VERSION = 1;
-const STORE_NAME = "follows";
+const STORE_NAME = "stories";
 
-const openDB = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
+const dbPromise = openDB(DB_NAME, DB_VERSION, {
+  upgrade(db) {
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+      db.createObjectStore(STORE_NAME, { keyPath: "id" });
+    }
+  },
+});
 
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: "userId" });
-      }
-    };
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+export const saveStory = async (story) => {
+  const db = await dbPromise;
+  return db.put(STORE_NAME, story);
 };
 
-const followUser = async (userId) => {
-  try {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    store.put({ userId });
-    await tx.done; // Menunggu transaksi selesai
-  } catch (error) {
-    console.error("Gagal mengikuti user:", error);
-  }
+export const getAllSavedStories = async () => {
+  const db = await dbPromise;
+  return db.getAll(STORE_NAME);
 };
 
-const unfollowUser = async (userId) => {
-  try {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    store.delete(userId);
-    await tx.done; // Menunggu transaksi selesai
-  } catch (error) {
-    console.error("Gagal berhenti mengikuti user:", error);
-  }
+export const deleteStoryById = async (id) => {
+  const db = await dbPromise;
+  return db.delete(STORE_NAME, id);
 };
-
-const isFollowing = async (userId) => {
-  try {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const store = tx.objectStore(STORE_NAME);
-    return new Promise((resolve) => {
-      const request = store.get(userId);
-      request.onsuccess = () => resolve(!!request.result);
-    });
-  } catch (error) {
-    console.error("Gagal mengecek status follow:", error);
-    return false;
-  }
-};
-
-export { followUser, unfollowUser, isFollowing };

@@ -33,7 +33,7 @@ export default class LoginView {
       .querySelector("#login-form")
       .addEventListener("submit", (event) => {
         event.preventDefault();
-        presenter.handleLogin(); // Delegate logic ke presenter
+        presenter.handleLogin(); 
       });
   }
 }

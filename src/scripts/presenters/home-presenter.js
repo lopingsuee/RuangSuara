@@ -1,6 +1,7 @@
 import StoryAPI from "../model/story-api.js";
 import createInstagramCard from "../../components/instagram-card.js";
 import HomeView from "../views/home-view.js";
+import { saveStory } from "../db.js";
 
 class HomePresenter {
   constructor({ container }) {
@@ -61,6 +62,8 @@ class HomePresenter {
         }
       });
 
+      this.setupSaveOfflineEvents();
+
       if (stories.length < this.pageSize) {
         this.view.hideLoadMoreButton();
       }
@@ -68,7 +71,6 @@ class HomePresenter {
       this.view.showErrorMessage("Gagal memuat cerita. Silakan coba lagi.");
     }
   }
-
 
   createStoryHTML(story) {
     return `
@@ -101,6 +103,29 @@ class HomePresenter {
     `);
 
     this.markers.push(marker);
+  }
+  setupSaveOfflineEvents() {
+    document.querySelectorAll(".save-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const story = {
+          id: button.dataset.id,
+          name: button.dataset.name,
+          description: button.dataset.description,
+          photoUrl: button.dataset.photo,
+          lat: button.dataset.lat ? parseFloat(button.dataset.lat) : null,
+          lon: button.dataset.lon ? parseFloat(button.dataset.lon) : null,
+          createdAt: button.dataset.date,
+        };
+
+
+        try {
+          await saveStory(story);
+          alert("Story berhasil disimpan untuk offline!");
+        } catch (err) {
+          console.error("Gagal menyimpan story:", err);
+        }
+      });
+    });
   }
 }
 

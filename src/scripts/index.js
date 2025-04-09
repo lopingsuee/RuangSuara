@@ -79,12 +79,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 window.addEventListener("load", async () => {
   try {
     const registration = await navigator.serviceWorker.register("/sw.js");
-    console.log("✅ Service Worker terdaftar:", registration);
 
-    // ⬇️ Tambahkan ini untuk minta izin & subscribe push notification
     await subscribeUserToPush(registration);
   } catch (error) {
-    console.error("❌ Gagal mendaftar Service Worker atau Push:", error);
   }
 });
 
@@ -106,10 +103,7 @@ async function subscribeUserToPush(registration) {
   const pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
   const subscriptionJSON = pushSubscription.toJSON();
 
-  // 🔥 Hapus expirationTime agar tidak error di server
   delete subscriptionJSON.expirationTime;
-
-  console.log("🧾 Data subscription yang dikirim:", subscriptionJSON);
 
   try {
     const token = localStorage.getItem("authToken");
@@ -126,14 +120,11 @@ async function subscribeUserToPush(registration) {
     );
 
     const result = await response.json();
-    console.log("📡 Subscription dikirim ke server:", result);
   } catch (error) {
-    console.error("❌ Gagal mengirim subscription ke server:", error);
   }
 }
 
 
-// Helper: Convert VAPID key
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
