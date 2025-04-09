@@ -6,7 +6,7 @@ class HomePage {
   }
 
   async render() {
-    return `<div id="home-container"></div>`; // Tempat HomeView akan dirender
+    return `<div id="home-container"></div>`; 
   }
 
   async afterRender() {

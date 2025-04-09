@@ -8,7 +8,6 @@ class PostStoryPresenter {
     this.photoBlob = null;
     this.handlePageUnload = this.handlePageUnload.bind(this);
   }
-
   async init() {
     this.view.render(this.container);
     this.elements = this.view.getElements();

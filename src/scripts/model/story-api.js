@@ -50,7 +50,7 @@ const StoryAPI = {
         throw new Error(responseJson.message || "Gagal mengunggah cerita");
       }
 
-      return responseJson; 
+      return responseJson;
     } catch (error) {
       console.error("Error posting story:", error);
       return { error: true, message: error.message };
