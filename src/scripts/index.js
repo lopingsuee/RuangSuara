@@ -81,8 +81,7 @@ window.addEventListener("load", async () => {
     const registration = await navigator.serviceWorker.register("/sw.js");
 
     await subscribeUserToPush(registration);
-  } catch (error) {
-  }
+  } catch (error) {}
 });
 
 const VAPID_PUBLIC_KEY =
@@ -100,7 +99,9 @@ async function subscribeUserToPush(registration) {
     applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
   };
 
-  const pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
+  const pushSubscription = await registration.pushManager.subscribe(
+    subscribeOptions
+  );
   const subscriptionJSON = pushSubscription.toJSON();
 
   delete subscriptionJSON.expirationTime;
@@ -120,10 +121,8 @@ async function subscribeUserToPush(registration) {
     );
 
     const result = await response.json();
-  } catch (error) {
-  }
+  } catch (error) {}
 }
-
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);

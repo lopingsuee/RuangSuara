@@ -21,7 +21,7 @@ export default defineConfig({
         "favicon.svg",
         "favicon.ico",
         "robots.txt",
-        "images/logo.png", // ✅ Tambahkan ini!
+        "images/logo.png",
       ],
       manifest: {
         name: "Instagram Feed App",
@@ -53,7 +53,22 @@ export default defineConfig({
               cacheName: "api-cache",
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 86400, // 1 hari
+                maxAgeSeconds: 86400, 
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern:
+              /^https:\/\/story-api\.dicoding\.dev\/images\/stories\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "image-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60, 
               },
               cacheableResponse: {
                 statuses: [0, 200],
